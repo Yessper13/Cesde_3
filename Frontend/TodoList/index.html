@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=r, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/style.css">
+    <title>Todo List</title>
+    <link rel="shortcut icon" href="./font/favicon.png" type="image/x-icon">
+</head>
+<body>
+    <div class="todo-bg">
+      <div class="todo-container">
+        <h2 class="todo-title">ToDo List</h2>
+        <div class="todo-input-row">
+          <input type="text" id="input-tarea" class="todo-input" placeholder="Agrega una tarea...">
+          <button class="todo-add-btn" onclick="agregarTarea()" title="Agregar tarea">
+            <span>+</span>
+          </button>
+        </div>
+        <div id="mensaje-tarea"></div>
+        <ul id="lista-tareas" class="todo-list"></ul>
+        <div class="historial-container">
+          <button id="toggle-historial" class="toggle-historial-btn" onclick="toggleHistorial()">Ver historial ▼</button>
+          <div id="historial-wrapper" style="display:none;">
+            <ul id="historial-tareas" class="todo-list"></ul>
+            <button class="delete-history-btn" onclick="deleteHistory()">🗑️ Borrar historial</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="./js/script.js"></script>
+</body>
+</html>

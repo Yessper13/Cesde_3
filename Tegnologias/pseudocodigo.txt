@@ -1,0 +1,64 @@
+INICIO
+    array ventas = [];
+    int cantidad;
+    int precio = 2000;
+    int subtotal;
+    const iva = 19;
+    int neto;
+    int descuento;
+    int cantDescuento;
+    int descuento15;
+    int descuento25;
+    int descuento35;
+    
+    if (cantidad > 0 && cantidad <= 10){
+        descuento = 5;
+        descuento++
+    }else if(cantidad >=11 && cantidad <=20){
+        descuento = 15;
+        descuento++;
+    }else if (cantidad >=21 && cantidad <=30){
+        descuento = 25;
+        cantDescuento++;
+    }else (cantidad > 30){
+        descuento = 35;
+        cantDescuento;
+    }
+
+    fucntion calcularSubtotal(precio,cantidad){
+        subtotal = precio * cantidad;
+        return subtotal;
+    }
+    
+    function calcularVlrDescuento(subtotal, descuento){
+        return subtotal * descuento / 100;
+    }
+
+    function calcularIva(subtotal, iva){
+        return subtotal * iva / 100;
+    }
+
+    function calcularNeto(subtotal, iva, descuento){
+        return subtotal + iva - descuento;
+    }
+
+    function calcularTotal(cantidad, precio){
+        subtotal = calcularSubtotal(precio, cantidad);
+        descuento = calcularVlrDescuento(subtotal, descuento);
+        iva = calcularIva(subtotal, iva);
+        neto = calcularNeto(subtotal, iva, descuento);
+        return neto;
+    }
+
+    function Ventas(descuento){
+        ventas.push({
+            cantidad: cantidad,
+            precio: precio,
+            subtotal: subtotal,
+            descuento: descuento,
+            iva: iva,
+            neto: neto
+        });
+    }
+CICLO
+    for

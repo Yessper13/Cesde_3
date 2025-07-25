@@ -1,0 +1,10 @@
+num1 = float(input("num 1 -> "))
+num2 = float(input("num 2 -> "))
+suma = num1 + num2
+resta = num1 - num2
+multi = num1 * num2
+divi = num1 / num2
+print(f'{num1}+{num2}={suma}')
+print(f'{num1}+{num2}={resta}')
+print(f'{num1}+{num2}={multi}')
+print(f'{num1}+{num2}={divi}')

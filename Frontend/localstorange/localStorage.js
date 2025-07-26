@@ -1,5 +1,4 @@
 //variables globales 
-
 let nombrePro = document.querySelector("#nombre-pro");
 let precioPro = document.querySelector("#precio-pro");
 let imagenPro = document.querySelector("#imagen-pro");
@@ -7,7 +6,6 @@ let descripcionPro = document.querySelector("#descripcion-pro");
 let btnGuardar = document.querySelector(".btn-guardar");
 let btnBorrar = document.querySelector(".btn-borrar");
 let listadoTabla = document.querySelector(".listado tbody");
-
 let buscarPro = document.querySelector("#buscar-pro");
 
 
@@ -28,6 +26,7 @@ btnGuardar.addEventListener("click", () => {
         return;
     }
 });
+
 //evento para recargar la pagina y mostrar los datos guardados
 document.addEventListener("DOMContentLoaded", () => {
     getData();
@@ -63,48 +62,93 @@ function saveLocalStorage(pro) {
     alert("Producto guardado exitosamente");
 }
 
-function searchProduct() {
-    let searchTerm = buscarPro.value.toLowerCase();
-    let productosGuardados = JSON.parse(localStorage.getItem("listado-pro")) || [];
-    clearTable();
-    
-    productosGuardados.forEach((producto, i) => {
-        if (producto.nombre.toLowerCase().includes(searchTerm)) {
-            let fila = document.createElement("tr");
-            fila.innerHTML = `
-                <td>${i + 1}</td>
-                <td>${producto.nombre}</td>
-                <td>${producto.precio}</td>
-                <td>${producto.descripcion}</td>
-                <td><img src="${producto.imagen}" alt="${producto.nombre}" width="120"></td>
-                <td>
-                    <button class="btn btn-warning" type="button">💥</button>
-                    <button class="btn btn-danger" type="button">❌</button>
-                </td>
-            `;
-        }
-    });
+// Escuchar el evento input en el campo de búsqueda
+buscarPro.addEventListener("input", searchProduct);
+
+// Función para limpiar la tabla antes de mostrar los resultados
+function clearTable() {
+    listadoTabla.innerHTML = "";
 }
-//funcion para mosytrar datos de localStorage
+
+// Función para crear una fila de producto
+function crearFilaProducto(producto, i) {
+    const fila = document.createElement('tr');
+    fila.dataset.index = i; // Guardar el índice en el dataset
+    fila.innerHTML = `
+        <td>${i + 1}</td>
+        <td>${producto.nombre}</td>
+        <td>${producto.precio}</td>
+        <td>${producto.descripcion}</td>
+        <td><img src="${producto.imagen}" alt="${producto.nombre}" width="120"></td>
+        <td>
+            <button class="btn btn-warning" type="button"><img class="icon" src="./img/edit.png" alt="editar"></button>
+            <button class="btn btn-danger" type="button"><img class="icon" src="./img/delete.png" alt="delete"></button>
+        </td>
+    `;
+    return fila;
+}
+
+// Delegación de eventos para editar y borrar
+listadoTabla.addEventListener("click", function(event) {
+    const btnEdit = event.target.closest(".btn-warning");
+    const btnDelete = event.target.closest(".btn-danger");
+    const fila = event.target.closest("tr");
+    if (btnEdit && fila) {
+        editarProducto(Number(fila.dataset.index));
+    }
+    if (btnDelete && fila) {
+        borrarProducto(Number(fila.dataset.index));
+    }
+});
+
+let editIndex = null; // Variable para saber si estamos editando
+
+// Función para editar producto
+function editarProducto(index) {
+    let productosGuardados = JSON.parse(localStorage.getItem("listado-pro")) || [];
+    const producto = productosGuardados[index];
+    if (!producto) return;
+
+    // Rellenar el formulario con los datos del producto
+    nombrePro.value = producto.nombre;
+    precioPro.value = producto.precio;
+    imagenPro.value = producto.imagen;
+    descripcionPro.value = producto.descripcion;
+
+    editIndex = index; // Activar modo edición
+}
+
+// Función para borrar producto
+function borrarProducto(index) {
+    let productosGuardados = JSON.parse(localStorage.getItem("listado-pro")) || [];
+    productosGuardados.splice(index, 1);
+    localStorage.setItem("listado-pro", JSON.stringify(productosGuardados));
+    clearTable();
+    getData();
+}
+
+// Función para obtener los datos del localStorage y mostrarlos en la tabla
+// Se llama al cargar la página y después de guardar un producto
 function getData() {
     let productosGuardados = JSON.parse(localStorage.getItem("listado-pro"))|| [];
-    productosGuardados.forEach((producto , i)=> {
-        let fila = document.createElement("tr");
-        fila.innerHTML = `
-            <td>${i + 1}</td>
-            <td>${producto.nombre}</td>
-            <td>${producto.precio}</td>
-            <td>${producto.descripcion}</td>
-            <td><img src="${producto.imagen}" alt="${producto.nombre}" width="120"></td>
-            <td>
-                <button class="btn btn-warning" type="button">💥</button>
-                <button class="btn btn-danger" type="button">❌</button>
-            </td>
-        `;
+    productosGuardados.forEach((producto, i) => {
+        const fila = crearFilaProducto(producto, i);
         listadoTabla.appendChild(fila);
     });
 }
 
-function clearTable() {
-    listadoTabla.innerHTML = "";
+// Función para buscar productos por nombre
+// Se activa al escribir en el campo de búsqueda
+function searchProduct() {
+    let searchTerm = buscarPro.value.toLowerCase();
+    let productosGuardados = JSON.parse(localStorage.getItem("listado-pro")) || [];
+    clearTable();
+
+    productosGuardados.forEach((producto, i) => {
+        if (producto.nombre.toLowerCase().includes(searchTerm)) {
+            const fila = crearFilaProducto(producto, i);
+            listadoTabla.appendChild(fila);
+        }
+    });
 }
+
